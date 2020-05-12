@@ -27,11 +27,11 @@ function processFirstItem(stringList, callback) {
  * Study the code for counter1 and counter2. Answer the questions below.
  * 
  * 1. What is the difference between counter1 and counter2?
- * 
+ * Counter1 is storing the count variable inside the function as a closure. counter2 is storing it outside as a global variable.
  * 2. Which of the two uses a closure? How can you tell?
- * 
+ * Counter1 uses a closure. You can tell because it's storing a variable while returning an anonymous function.
  * 3. In what scenario would the counter1 code be preferable? In what scenario would counter2 be better? 
- *
+ *counter1 would be best if you wanted count to be a private variable and not accessible globally. counter2 is best if you need access to the variable from within multiple functions.
 */
 
 // counter1 code
@@ -56,11 +56,15 @@ function counter2() {
 
 Write a function called `inning` that generates a random number of points that a team scored in an inning. This should be a whole number between 0 and 2. */
 
-function inning(/*Code Here*/){
+function inning(){
 
-    /*Code Here*/
+  const scoreTeam = Math.floor(Math.random() * 3);
+  
+  return scoreTeam;
 
 }
+
+inning();
 
 /* Task 3: finalScore()
 
@@ -76,11 +80,23 @@ finalScore(inning, 9) might return:
 
 */ 
 
-function finalScore(/*code Here*/){
+function finalScore(cb, num){
 
-  /*Code Here*/
+  let home = 0;
+  let away = 0;
+  let score = {};
+  
+  for(let i = 0; i < num; i++){
+    score.home = home;
+    score.away = away;
+   home += cb(inning);  
+    away += cb(inning);
 
-}
+  };
+  return score;
+};
+
+console.log(finalScore(inning, 9));
 
 /* Task 4: 
 
@@ -103,8 +119,21 @@ and returns the score at each pont in the game, like so:
 
 Final Score: 6 - 10 */
 
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function scoreboard(cb, numInnings) {
+  let home = 0;
+  let away = 0;
+
+  for(let i = 1; i <= numInnings; i++){
+    let homeScore = cb(inning);
+    let awayScore = cb(inning);
+      console.log( `${i}th inning: Away Team ${awayScore} - Home Team ${homeScore}`);
+
+    home += homeScore;
+    away += awayScore;
+}
+
+console.log(`Final score is : Away Team ${away} - Home Team ${home}`);
 }
 
 
+scoreboard(inning, 9);
